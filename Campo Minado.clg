@@ -1,0 +1,556 @@
+algoritmo rascunho13;
+// Síntese
+//  Objetivo: Algoritmo que simula um jogo de Campo minado
+//  Entrada: Dois números inteiro que simulam coordenadas.
+//  Saída: Um procedimento que diz se o usuario ganhou ou não
+
+/*
+ * Erros do código: 
+ * 		Em alguns testes o algoritmo sorteou duas coordenadas iguais
+ * 		
+ */
+
+principal
+	// Declarações
+
+	inteiro cont, w, entLinha, entColuna;
+	inteiro controlRes;
+	inteiro i, m, fLinhaSort[5], fColunaSort[5], confirm;
+	inteiro fL[5], fC[5], ind;
+
+	cont = 0;
+	w = 1;
+	confirm = 0;
+	ind = 0;
+
+	// Instruções
+
+	interface();
+
+	para(i de 0 ate 4 passo 1)faca
+		fLinhaSort[i] = aleatorio(4);
+		fColunaSort[i] = aleatorio(4);
+	fimPara
+
+	escreva("fLinhaSort[i] = "); //		Comando para mostrar as coordenadas que foram sorteadas
+	para(i de 0 ate 4 passo 1)faca
+		escreva(fLinhaSort[i]+1, " ");
+	fimPara
+	escreval("");
+	
+	escreva("fColunaSort[i] = ");
+	para(i de 0 ate 4 passo 1)faca
+		escreva(fColunaSort[i]+1, " ");
+	fimPara
+	escreval("");
+
+	enquanto(cont<5)faca
+		//									Repetição para ler as Coordenadas INSERIDAS PELO USUARIO.
+	
+	// 		Repetição para ler a linha
+		
+		escreva("Digite a linha da ", w, "ª tentativa: "); // 	Repetição para lei as linhas, o eixo X
+		leia(entLinha);
+			
+		se(entLinha<1 ou entLinha>5)entao
+			enquanto(entLinha<1 ou entLinha>5)faca
+				escreva("Dado incorreto. Digite a linha da ", w, "ª tentativa novamente: ");
+				leia(entLinha);
+			fimEnquanto
+		fimSe
+		entLinha = entLinha-1;
+	
+	// 		Repetição para ler as colunas
+		
+		escreva("Digite a coluna da ", w, "ª tentativa: "); //	Repetição para ler as colunas, o eixo Y
+		leia(entColuna);
+		
+		se(entColuna<1 ou entColuna>5)entao
+			enquanto(entColuna<1 ou entColuna>5)faca
+				escreva("Dado incorreto. Digite a coluna da ", w, "ª tentativa novamente: ");
+				leia(entColuna);
+			fimEnquanto
+		fimSe
+		entColuna = entColuna -1;
+
+		fL[ind] = entLinha;
+		fC[ind] = entColuna;
+
+		para(i de 0 ate 4 passo 1)faca
+			se(entLinha == fLinhaSort[i] e entColuna == fColunaSort[i])entao
+				confirm = confirm +1;
+			fimSe
+		fimPara
+
+		interface_alt(entLinha, entColuna, confirm, fL, fC, ind);
+		
+		se(confirm > 0)entao
+			interrompa;
+		fimSe
+
+		cont = cont + 1;
+		w = w + 1;
+		ind = ind + 1;
+			
+	fimEnquanto
+
+	interfaceFinal(confirm);
+/*
+ *  Indice:
+ * 		interface() 		106 - 255
+ * 		interfaceFinal() 	257 - 368
+ * 		interface_alt () 	370 - 556
+ */
+fimPrincipal
+
+procedimento interface ()
+
+	inteiro cont, contL, nLinhas;
+	texto matriz[5][5];
+	inteiro n, i, m;
+
+	cont=0;
+	contL = 0;
+	nLinhas = 4;
+
+	escreva("┌");
+	enquanto(cont<29)faca
+		escreva(" -");
+		cont = cont+1;
+	fimEnquanto
+	escreva(" ┐");
+	escreval("");
+	cont =0;
+
+	enquanto(contL < nLinhas)faca
+		escreva("│");
+		se(contL == 1)entao
+			enquanto(cont<23)faca
+				escreva(" ");
+				cont = cont+1;
+			fimEnquanto
+			cont = 0;
+			
+			escreva("Campo Minado!");
+			
+			enquanto(cont<23)faca
+				escreva(" ");
+				cont = cont+1;
+			fimEnquanto
+			cont = 0;
+		senao
+			se(contL == 3)entao
+			
+				escreva("Eduardo Belarmino - 221008580");
+				
+				enquanto(cont<30)faca
+					escreva(" ");
+					cont = cont+1;
+				fimEnquanto
+				cont = 0;
+			senao
+				enquanto(cont<59)faca
+					escreva(" ");
+					cont = cont+1;
+				fimEnquanto
+				cont = 0;
+			fimSe
+		fimSe
+		
+		escreva("│");
+		escreval("");
+		contL = contL+1;
+	fimEnquanto
+
+	escreva("└");
+	enquanto(cont<29)faca
+		escreva(" -");
+		cont = cont+1;
+	fimEnquanto
+	escreva(" ┘");
+	escreval("");
+	cont =0;
+
+// 		Desenhar Quadro
+
+	para(i de 0 ate 4 passo 1)faca
+		para(m de 0 ate 4 passo 1)faca
+			se(m==4)entao
+				matriz[i][m] = "  │ ○ │";
+			senao
+				matriz[i][m] = "  │ ○";
+			fimSe
+		fimPara
+	fimPara
+
+	escreval("              ┌ — - - - - - - - - - - - — ┐"); //	Borda Superior
+	
+	para(i de 0 ate 4 passo 1)faca
+		para(m de 0 ate 4 passo 1)faca
+			se(m==0)entao
+				escreva("            ");
+			fimSe
+			escreva(matriz[i][m]);
+			se(m==4)entao
+				escreval("");
+				se(i<4)entao
+					escreval("              ├ — - - - - - - - - - - - — ┤");
+				fimSe
+			fimSe
+		fimPara
+	fimPara
+	
+	escreval("              └ — - - - - - - - - - - - — ┘"); //	Borda Inferior
+
+	
+// 		Desenhar Legenda
+
+	cont=0;
+	contL = 0;
+	nLinhas = 1;
+	
+	escreva("┌");
+	enquanto(cont<29)faca
+		escreva(" -");
+		cont = cont+1;
+	fimEnquanto
+	escreva(" ┐");
+	escreval("");
+	cont =0;
+
+	enquanto(contL < nLinhas)faca
+		escreva("│");
+		se(contL == 0)entao
+			escreva(" ");
+				
+			escreva("☼ ─ Bomba");
+			
+			enquanto(cont<48)faca
+				escreva(" ");
+				cont = cont+1;
+			fimEnquanto
+			cont = 0;
+		senao
+			enquanto(cont<59)faca
+				escreva(" ");
+				cont = cont+1;
+			fimEnquanto
+			cont = 0;
+		fimSe
+		
+		escreva("│");
+		escreval("");
+		contL = contL+1;
+	fimEnquanto
+
+	escreva("└");
+	enquanto(cont<29)faca
+		escreva(" -");
+		cont = cont+1;
+	fimEnquanto
+	escreva(" ┘");
+	escreval("");
+	cont =0;
+
+fimProcedimento
+
+procedimento interfaceFinal (inteiro confirm)
+
+	inteiro cont, contL, nLinhas;
+	inteiro n, i, m;
+
+	cont = 0;
+	contL = 0;
+	nLinhas = 1;
+
+//	limpaTela();
+
+	se(confirm > 0)entao
+		
+		escreva("┌");
+		enquanto(cont<29)faca
+			escreva(" -");
+			cont = cont+1;
+		fimEnquanto
+		escreva(" ┐");
+		escreval("");
+		cont =0;
+	
+		enquanto(contL < nLinhas)faca
+			escreva("│");
+			se(contL == 0)entao
+				enquanto(cont<25)faca
+					escreva(" ");
+					cont = cont+1;
+				fimEnquanto
+				cont = 0;
+				
+				escreva("GAME OVER");
+				
+				enquanto(cont<25)faca
+					escreva(" ");
+					cont = cont+1;
+				fimEnquanto
+				cont = 0;
+			senao
+				enquanto(cont<59)faca
+					escreva(" ");
+					cont = cont+1;
+				fimEnquanto
+				cont = 0;
+			fimSe
+			
+			escreva("│");
+			escreval("");
+			contL = contL+1;
+		fimEnquanto
+	
+		escreva("└");
+		enquanto(cont<29)faca
+			escreva(" -");
+			cont = cont+1;
+		fimEnquanto
+		escreva(" ┘");
+		escreval("");
+		cont =0;
+
+	senao
+
+		escreva("┌");
+		enquanto(cont<29)faca
+			escreva(" -");
+			cont = cont+1;
+		fimEnquanto
+		escreva(" ┐");
+		escreval("");
+		cont =0;
+	
+		enquanto(contL < nLinhas)faca
+			escreva("│");
+			se(contL == 0)entao
+				enquanto(cont<19)faca
+					escreva(" ");
+					cont = cont+1;
+				fimEnquanto
+				cont = 0;
+				
+				escreva("PARABÉNS, VOCÊ GANHOU");
+				
+				enquanto(cont<19)faca
+					escreva(" ");
+					cont = cont+1;
+				fimEnquanto
+				cont = 0;
+			senao
+				enquanto(cont<59)faca
+					escreva(" ");
+					cont = cont+1;
+				fimEnquanto
+				cont = 0;
+			fimSe
+			
+			escreva("│");
+			escreval("");
+			contL = contL+1;
+		fimEnquanto
+	
+		escreva("└");
+		enquanto(cont<29)faca
+			escreva(" -");
+			cont = cont+1;
+		fimEnquanto
+		escreva(" ┘");
+		escreval("");
+		cont =0;
+
+	fimSe
+	
+fimProcedimento
+
+procedimento interface_alt (inteiro entLinha, inteiro entColuna, inteiro confirm, inteiro fL[], inteiro fC[], inteiro ind)
+
+	inteiro cont, contL, nLinhas;
+	texto matriz[5][5];
+	inteiro n, i, m;
+
+	cont=0;
+	contL = 0;
+	nLinhas = 4;
+
+	para(i de 0 ate 4 passo 1)faca
+		para(m de 0 ate 4 passo 1)faca
+			se(i == entLinha e m == entColuna e entColuna == 4 e confirm >0 )entao
+				matriz[i][m] = "  │ ☼ │";
+			senao
+				se(i == entLinha e m == entColuna e confirm > 0)entao
+					matriz[i][m] = "  │ ☼";
+				senao
+					se(i == entLinha e m == entColuna e entColuna == 4)entao
+						matriz[i][m] = "  │ ■ │";
+					senao
+						se(i == entLinha e m == entColuna)entao
+							matriz[i][m] = "  │ ■";
+						senao
+							se(m == 4)entao
+								matriz[i][m] = "  │ ○ │";
+							senao
+								matriz[i][m] = "  │ ○";
+							fimSe
+						fimSe
+					fimSe
+				fimSe
+			fimSe
+		fimPara
+	fimPara
+
+	para(i de 0 ate ind passo 1)faca
+		se(fC[i] == 4 e confirm >0)entao
+			matriz[fL[i]][fC[i]] = "  │ ☼ │";
+		senao
+			se(confirm >0)entao
+				matriz[fL[i]][fC[i]] = "  │ ☼";
+			senao
+				se(fC[i] == 4)entao
+					matriz[fL[i]][fC[i]] = "  │ ■ │";
+				senao
+					matriz[fL[i]][fC[i]] = "  │ ■";
+				fimSe
+			fimSe
+		fimSe
+	fimPara
+
+	limpaTela();
+
+// 			Desenho Cabeçalho
+
+	escreva("┌");
+	enquanto(cont<29)faca
+		escreva(" -");
+		cont = cont+1;
+	fimEnquanto
+	escreva(" ┐");
+	escreval("");
+	cont =0;
+
+	enquanto(contL < nLinhas)faca
+		escreva("│");
+		se(contL == 1)entao
+			enquanto(cont<23)faca
+				escreva(" ");
+				cont = cont+1;
+			fimEnquanto
+			cont = 0;
+			
+			escreva("Campo Minado!");
+			
+			enquanto(cont<23)faca
+				escreva(" ");
+				cont = cont+1;
+			fimEnquanto
+			cont = 0;
+		senao
+			se(contL == 3)entao
+			
+				escreva("Eduardo Belarmino - 221008580");
+				
+				enquanto(cont<30)faca
+					escreva(" ");
+					cont = cont+1;
+				fimEnquanto
+				cont = 0;
+			senao
+				enquanto(cont<59)faca
+					escreva(" ");
+					cont = cont+1;
+				fimEnquanto
+				cont = 0;
+			fimSe
+		fimSe
+		
+		escreva("│");
+		escreval("");
+		contL = contL+1;
+	fimEnquanto
+
+	escreva("└");
+	enquanto(cont<29)faca
+		escreva(" -");
+		cont = cont+1;
+	fimEnquanto
+	escreva(" ┘");
+	escreval("");
+	cont =0;
+
+
+// 		Desenho Quadro
+
+	escreval("              ┌ — - - - - - - - - - - - — ┐"); //	Borda Superior
+	
+	para(i de 0 ate 4 passo 1)faca
+		para(m de 0 ate 4 passo 1)faca
+			se(m==0)entao
+				escreva("            ");
+			fimSe
+			escreva(matriz[i][m]);
+			se(m==4)entao
+				escreval("");
+				se(i<4)entao
+					escreval("              ├ — - - - - - - - - - - - — ┤");
+				fimSe
+			fimSe
+		fimPara
+	fimPara
+	
+	escreval("              └ — - - - - - - - - - - - — ┘"); //	Borda Inferior
+
+	
+// 		Desenhar Legenda
+
+	cont=0;
+	contL = 0;
+	nLinhas = 1;
+	
+	escreva("┌");
+	enquanto(cont<29)faca
+		escreva(" -");
+		cont = cont+1;
+	fimEnquanto
+	escreva(" ┐");
+	escreval("");
+	cont =0;
+
+	enquanto(contL < nLinhas)faca
+		escreva("│");
+		se(contL == 0)entao
+			escreva(" ");
+				
+			escreva("☼ ─ Bomba");
+			
+			enquanto(cont<48)faca
+				escreva(" ");
+				cont = cont+1;
+			fimEnquanto
+			cont = 0;
+		senao
+			enquanto(cont<59)faca
+				escreva(" ");
+				cont = cont+1;
+			fimEnquanto
+			cont = 0;
+		fimSe
+		
+		escreva("│");
+		escreval("");
+		contL = contL+1;
+	fimEnquanto
+
+	escreva("└");
+	enquanto(cont<29)faca
+		escreva(" -");
+		cont = cont+1;
+	fimEnquanto
+	escreva(" ┘");
+	escreval("");
+	cont =0;
+
+fimProcedimento
