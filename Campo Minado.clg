@@ -7,7 +7,7 @@ algoritmo rascunho13;
 /*
  * Erros do código: 
  * 
- * 		Em alguns testes o algoritmo sorteou duas coordenadas iguais	
+ * 	Em alguns testes o algoritmo sorteou duas coordenadas iguais	
  */
 
 principal
