@@ -1,8 +1,8 @@
-algoritmo rascunho13;
+algoritmo Campo_Minado;
 // Síntese
 //  Objetivo: Algoritmo que simula um jogo de Campo minado
 //  Entrada: Dois números inteiro que simulam coordenadas.
-//  Saída: Um procedimento que diz se o usuario ganhou ou não
+//  Saída: Um procedimento que diz se o usuario ganhou ou não.
 
 /*
  * Erros do código: 
